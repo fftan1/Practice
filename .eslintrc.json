@@ -1,0 +1,63 @@
+// {
+//     "env": {
+//         "es6": true,
+//         "node": true
+//     },
+//     "extends": "eslint:recommended",
+//     "globals": {
+//         "Atomics": "readonly",
+//         "SharedArrayBuffer": "readonly"
+//     },
+//     "parserOptions": {
+//         "ecmaFeatures": {
+//             "jsx": true
+//         },
+//         "ecmaVersion": 2018,
+//         "sourceType": "module"
+//     },
+//     "plugins": [
+//         "react"
+//     ],
+//     "rules": {
+//     }
+// }
+
+{
+    "env": {
+      "node": true,
+      "browser": false,
+      "es6": true
+    },
+    "parser": "babel-eslint",
+    "extends": "airbnb",
+    "rules": {
+      "radix": "off",
+      "max-len": "off",
+      "camelcase": "off",
+      "no-bitwise": "off",
+      "no-plusplus": "off",
+      "arrow-body-style": "off",
+      "object-curly-newline": "off",
+      "import/no-extraneous-dependencies": "off",
+      "prefer-destructuring": [
+        "error",
+        {
+          "array": false,
+          "object": true
+        },
+        {
+          "enforceForRenamedProperties": false
+        }
+      ],
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [
+            ".js",
+            ".jsx"
+          ]
+        }
+      ],
+      "react/prefer-stateless-function": 0
+    }
+  }
