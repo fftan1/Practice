@@ -10,7 +10,7 @@ import reducers from './src/navigation/modules/reducers';
 import Login from './src/navigation/screens/Login';
 import Home from './src/navigation/screens/Home';
 import Screen2 from './src/navigation/screens/Screen2';
-import Screen3 from './src/navigation/screens/Screen3';
+import Screen3 from './src/navigation/screens/profile/Screen3';
 import Screen1 from './src/navigation/screens/Screen1';
 import Screen4 from './src/navigation/screens/Screen4';
 import NavigationService from './NavigationService';
