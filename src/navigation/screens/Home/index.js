@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, FlatList, Image, Modal, TextInput } from 'react-native';
-
+import { View, Text, ScrollView, TouchableOpacity, FlatList, Image, Modal, TextInput, Alert } from 'react-native';
+import PropTypes from 'prop-types';
 // Components
 
 
@@ -16,7 +16,7 @@ const DATA = [
   { title: 'chó', description: '1 con' },
   { title: 'mèo', description: '1 con' },
   { title: 'bò', description: '2 chục con' },
-]
+];
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -28,13 +28,12 @@ export default class Home extends React.Component {
       title: '',
       description: '',
       avatar: '',
-      indexSpec: 0,
-    }
+    };
   }
 
   renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity style={styles.containerItem} onPress={() => { this.updateItem(index) }}>
+      <TouchableOpacity style={styles.containerItem} onPress={() => this.updateItem(index)}>
         <View style={styles.containerImageItem}>
           <Image source={this.IMAGE} style={styles.imageItem} />
         </View>
@@ -43,18 +42,18 @@ export default class Home extends React.Component {
           <Text style={styles.desItem}>{item.description}</Text>
         </View>
       </TouchableOpacity>
-    )
+    );
   }
 
   updateItem = (numIndex) => {
     // const { title } = this.state;
     // DATA.findIndex(x => x.title === title)
-    const { navigate } = this.props.navigation;
+    const { navigation } = this.props;
     if (numIndex === 0) {
-      navigate('SCREEN1')
+      navigation.navigate('SCREEN1');
     }
     if (numIndex === 1) {
-      navigate('SCREEN4')
+      navigation.navigate('SCREEN4');
     }
   }
 
@@ -70,10 +69,10 @@ export default class Home extends React.Component {
     const stateModal = { modalVisible };
     const { title, description, avatar, refreshFlatlist } = this.state;
     if (title.length === 0) {
-      alert('vui long nhap title');
+      Alert.alert('vui long nhap title');
     }
     if (description.length === 0) {
-      alert('vui long nhap description');
+      Alert.alert('vui long nhap description');
     }
     DATA.push({ title, description, avatar });
     stateModal.refreshFlatlist = !refreshFlatlist;
@@ -89,7 +88,7 @@ export default class Home extends React.Component {
             <Text style={styles.txtAdd}>Add</Text>
           </TouchableOpacity>
           <FlatList
-            data={DATA.sort(function (a, b) { return a, b })}
+            data={DATA.sort((a, b) => a.title > b.title)}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => index.toString()}
             extraData={refreshFlatlist}
@@ -119,3 +118,7 @@ export default class Home extends React.Component {
     );
   }
 }
+
+Home.propTypes = {
+  navigation: PropTypes.instanceOf(Object).isRequired,
+};

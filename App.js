@@ -6,7 +6,7 @@ import { createStore, applyMiddleware } from 'redux';
 import createSagaMidleWare from 'redux-saga';
 
 import LoginSaga from './src/navigation/modules/saga/LoginSaga';
-import reducers from './src/navigation/modules/reducers';
+import mainReducer from './src/navigation/modules/reducers';
 import Login from './src/navigation/screens/Login';
 import Home from './src/navigation/screens/Home';
 import Screen2 from './src/navigation/screens/Screen2';
@@ -14,11 +14,13 @@ import Screen3 from './src/navigation/screens/profile/Screen3';
 import Screen1 from './src/navigation/screens/Screen1';
 import Screen4 from './src/navigation/screens/Screen4';
 import NavigationService from './NavigationService';
+import UserInfo from './src/navigation/screens/profile/UserInfo';
 
 // ====================================================================================================
 //  stackChild < tab < stack < switch
 // ====================================================================================================
 
+// be included by tab
 const homeStack = createStackNavigator({
   HOME_SC: {
     screen: Home,
@@ -36,6 +38,24 @@ const homeStack = createStackNavigator({
   },
 });
 
+// be included by tab
+const ChildStackScreen3 = createStackNavigator({
+  SCREEN3: {
+    screen: Screen3,
+    navigationOptions: {
+      title: 'Profile',
+    },
+  },
+
+  USER_INFO_SC: {
+    screen: UserInfo,
+    navigationOptions: {
+      title: 'Infomation',
+    },
+  },
+});
+
+// be included by stack
 const tab = createBottomTabNavigator({
   HOME_SC: {
     screen: homeStack,
@@ -45,8 +65,8 @@ const tab = createBottomTabNavigator({
     screen: Screen2,
   },
 
-  SCREEN3: {
-    screen: Screen3,
+  Profile: {
+    screen: ChildStackScreen3,
   },
 }, {
   tabBarOptions: {
@@ -66,6 +86,7 @@ const tab = createBottomTabNavigator({
   },
 });
 
+// be included by switchNav
 const stack = createStackNavigator({
   TAB: {
     screen: tab,
@@ -97,7 +118,7 @@ const sagaMidleWare = createSagaMidleWare();
 
 const Container = createAppContainer(switchNav);
 
-const store = createStore(reducers, applyMiddleware(sagaMidleWare));
+const store = createStore(mainReducer, applyMiddleware(sagaMidleWare));
 
 const App = () => {
   const getRef = (abc) => {

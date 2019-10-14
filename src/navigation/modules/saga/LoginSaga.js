@@ -15,16 +15,16 @@ function* checkLogin(action) {
   const { navigatorNamed } = NavigationService;
   const ref = NavigationService.getNavigator(navigatorNamed.MyNavigator);
   try {
-    if (action.username.length === 0) {
-      Alert.alert(TITLE_MESSAGE, 'Tên đăng nhập không được để trống');
-      yield put({ type: ActionTypes.AUTH_LOGIN_FAIL });
-      return;
-    }
-    if (action.password.length === 0) {
-      Alert.alert(TITLE_MESSAGE, 'Mật khẩu không được để trống');
-      yield put({ type: ActionTypes.AUTH_LOGIN_FAIL });
-      return;
-    }
+    // if (action.username.length === 0) {
+    //   Alert.alert(TITLE_MESSAGE, 'Tên đăng nhập không được để trống');
+    //   yield put({ type: ActionTypes.AUTH_LOGIN_FAIL });
+    //   return;
+    // }
+    // if (action.password.length === 0) {
+    //   Alert.alert(TITLE_MESSAGE, 'Mật khẩu không được để trống');
+    //   yield put({ type: ActionTypes.AUTH_LOGIN_FAIL });
+    //   return;
+    // }
 
     const response = yield ames247.post('/login-ames-app', {
       UserName: action.username,
@@ -34,26 +34,19 @@ function* checkLogin(action) {
     let myAiUser = {};
     if (response.data.message === 'OK') {
       const { users } = response.data;
-      console.log("TCL: function*checkLogin -> users", users)
       users.loginMyAi = JSON.parse(users.loginMyAi);
       if (users.loginMyAi.message === 'OK') {
         users.loginMyAi = users.loginMyAi.user;
-        console.log("TCL: function*checkLogin -> users.loginMyAi", users.loginMyAi)
-        // users.loginMyAi.id = users.loginMyAi.id || users.loginMyAi.userId || users.loginMyAi.Id;
-        // if (users.loginMyAi.userRoles) {
-        //   // console.log(users.loginMyAi.userRoles);
-        //   users.loginMyAi.userRoles = JSON.parse(users.loginMyAi.userRoles);
-        //   users.loginMyAi.userRoles = users.loginMyAi.userRoles.map((x) => x.Name);
-        // }
-        console.log("TCL: function*checkLogin -> test")
         myAiUser = users.loginMyAi;
-        yield put({ type: ActionTypes.AUTH_LOGIN_SUCCESS, loginUser: myAiUser });
+        yield put({ type: ActionTypes.AUTH_LOGIN_SUCCESS, loginUser: { myAiUser } });
+        console.log("TCL: function*checkLogin -> myAiUser", myAiUser)
         ref._navigation.navigate('STACK');
         return;
       }
       alertModal.message = 'sai sai';
       putModel.type = ActionTypes.AUTH_LOGIN_FAIL;
     }
+    console.log("TCL: function*checkLogin -> myAiUser", myAiUser)
   } catch (error) {
     // console.log("TCL: function*checkLogin -> error", error);
     putModel.error = error;

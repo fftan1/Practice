@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Alert, TextInput } from 'react-native';
-import PropTypes, { number } from 'prop-types';
-import { reduxForm, Field } from 'redux-form';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 // Components
 
 
@@ -10,76 +11,64 @@ import styles from './styles';
 
 // Variables
 
+
 class Screen3 extends React.Component {
-  onSubmitLogout = () => {
-    const { navigation } = this.props;
-    Alert.alert('Answer question', 'Are you sure?',
-      [
-        { text: 'hoi qq' },
-        { text: 'cancel' },
-        { text: 'OK', onPress: () => navigation.navigate('LOGIN_SC') },
-      ]);
+  static propTypes = {
+    loginUser: PropTypes.instanceOf(Object).isRequired,
   }
 
-  required = (value) => (value ? undefined : 'Required hfygh');
+  constructor(props) {
+    super(props);
+    this.AVATAR = 'https://scontent.fdad2-1.fna.fbcdn.net/v/t1.0-9/24774750_881098732065511_92687087390663317_n.jpg?_nc_cat=109&_nc_oc=AQkNwEftvU1e5jD4ioFhzEem9mX0LKRnOCpou-fOsV7tNylgMY7nuzLWPGSG7ocwLLg&_nc_ht=scontent.fdad2-1.fna&oh=8a06b1de21786d9f2276be3358f3d405&oe=5E28D508';
 
-  maxLength = (value) => (value && value.length > 15 ? 'Must be 15 characters or less hgbj' : undefined);
-
-  number = (value) => (value && isNaN(number(value)) ? 'Must be a number' : undefined);
-
-  emailType = (value) => (value && !/^[A-Z0_9._%+_]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined);
-
-  renderField = ({ keyboardType, meta: { touched, error, warning }, input: { onChange, ...restInput } }) => {
-    return (
-      <View>
-        <TextInput style={styles.input} keyboardType={keyboardType} onChange={onChange} {...restInput}
-          autoCorrect={false}
-          placeholder='Enter username'
-          placeholderTextColor='#dddddd'
-        />
-        {
-          touched && (
-            (error && <Text style={{ color: 'red' }}>{error}</Text>) || (
-              warning && <Text style={{ color: 'red' }}>{warning}</Text>)
-          )
-        }
-      </View>
-    );
   }
 
-  submit = (values) => {
-    alert(`validation success. Values = ~${JSON.stringify(values)}`);
+  componentDidMount() {
+    const { loginUser } = this.props;
+    console.log("TCL: Screen3 -> componentDidMount -> state", loginUser);
   }
-
 
   render = () => {
-    const { handleSubmit } = this.props;
+    const { loginUser } = this.props;
     return (
       <View style={styles.container}>
-        <Field keyboardType="default" component={this.renderField} name="Username"
-          validate={[this.required, this.maxLength]}
-        />
-        <Field keyboardType="email-address" component={this.renderField} name="Email"
-          validate={[this.emailType, this.required]}
-        />
-        <TouchableOpacity style={styles.btnLogout} onPress={handleSubmit(this.submit)}>
-          <Text style={styles.txtLogout}>Submit</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btnLogout} onPress={this.onSubmitLogout}>
-          <Text style={styles.txtLogout}>Logout</Text>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('USER_INFO_SC')} style={styles.topButton}>
+          <View style={styles.topViewAvatar}>
+            <Image source={{ uri: this.AVATAR }} style={styles.topViewAvatar} />
+          </View>
+          <View style={styles.topViewInfo}>
+            <View style={styles.viewRowInfo}>
+              <View>
+                <Icon name="account" />
+              </View>
+              <View>
+                <Text>{loginUser.Fullname}</Text>
+              </View>
+            </View>
+            {/* hr hr hr */}
+            <View style={styles.viewRowInfo}>
+              <View>
+                <Icon name="email" />
+              </View>
+              <View>
+                <Text>abc</Text>
+              </View>
+            </View>
+          </View>
         </TouchableOpacity>
       </View>
     );
   }
 }
 
-Screen3.propTypes = {
-  navigation: PropTypes.instanceOf(Object).isRequired,
-  handleSubmit: PropTypes.instanceOf(Object).isRequired,
+const mapStateToProps = (state) => {
+  return ({
+    loginUser: state.loginReducer.loginUser,
+  });
 };
 
-const TestForm = reduxForm({
-  form: 'test',
-})(Screen3);
+const mapDispatchToProps = (dispatch) => ({
 
-export default TestForm;
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Screen3);
